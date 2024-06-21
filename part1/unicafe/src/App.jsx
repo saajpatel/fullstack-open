@@ -10,6 +10,14 @@ const Button = (props) => (
 
 )
 
+const Information = ({text, value}) => (
+
+  <p>
+    {text} {value}
+  </p>
+
+)
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -21,6 +29,8 @@ const App = () => {
     statistics: 'statistics'
   }
 
+  const all = good + neutral + bad
+
   return (
     <div>
       <Header header = {headers.feedback}/>
@@ -31,9 +41,12 @@ const App = () => {
 
       <Header header = {headers.statistics}/>
 
-      <p>good {good}</p>
-      <p>meutral {neutral}</p>
-      <p>bad {bad}</p>
+      <Information text={'good'} value={good}/>
+      <Information text={'neutral'} value={neutral}/>
+      <Information text={'bad'} value={bad}/>
+      <Information text={'all'} value={all}/>
+      <Information text={'average'} value={(good - bad)/(all)}/>
+      <Information text={'positive'} value={(good/all*100) + ' %'} />
     </div>
   )
 }
