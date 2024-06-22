@@ -18,9 +18,15 @@ const Information = ({text, value}) => (
 
 )
 
-const Statistics = (props) => (
-
-  <Information text={'good'} value={good}/>
+const Statistics = ({good, neutral, bad, all}) => (
+  <>
+    <Information text={'good'} value={good}/>
+    <Information text={'neutral'} value={neutral}/>
+    <Information text={'bad'} value={bad}/>
+    <Information text={'all'} value={all}/>
+    <Information text={'average'} value={(good - bad)/(all)}/>
+    <Information text={'positive'} value={(good/all*100) + ' %'}/>
+  </>
 
 )
 
@@ -47,12 +53,7 @@ const App = () => {
 
       <Header header = {headers.statistics}/>
 
-      <Information text={'good'} value={good}/>
-      <Information text={'neutral'} value={neutral}/>
-      <Information text={'bad'} value={bad}/>
-      <Information text={'all'} value={all}/>
-      <Information text={'average'} value={(good - bad)/(all)}/>
-      <Information text={'positive'} value={(good/all*100) + ' %'} />
+      <Statistics good={good} neutral={neutral} bad={bad} all={all}/>
     </div>
   )
 }
