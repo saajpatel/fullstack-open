@@ -18,6 +18,12 @@ const Information = ({text, value}) => (
 
 )
 
+const Statistics = (props) => (
+
+  <Information text={'good'} value={good}/>
+
+)
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
