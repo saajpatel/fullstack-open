@@ -56,7 +56,7 @@ const App = () => {
       </button>
       <Header header={headers.most}/>
       <p>
-        {anecdotes[Math.max(...vote) - 1]}
+        {anecdotes[vote.indexOf(Math.max(...vote))]}
       </p>
     </div>
   )
