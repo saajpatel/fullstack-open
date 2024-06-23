@@ -1,5 +1,11 @@
 import { useState } from 'react'
 
+const Header = ({header}) => (
+  <h1>
+    {header}
+  </h1>
+)
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -11,6 +17,11 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
+
+  const headers = {
+    title: 'Anecdote of the day',
+    most: 'Anecdote with the most votes'
+  }
 
   const [selected, setSelected] = useState(0)
   const [vote, setVote] = useState(
@@ -29,9 +40,8 @@ const App = () => {
 
   return (
 
-    
-
     <div>
+      <Header header={headers.title}/>
       <p>
         {anecdotes[selected]}
       </p>
@@ -44,7 +54,10 @@ const App = () => {
       <button onClick={handleNextAnecdote}>
         next anecdote
       </button>
-
+      <Header header={headers.most}/>
+      <p>
+        {anecdotes[Math.max(...vote) - 1]}
+      </p>
     </div>
   )
 }
