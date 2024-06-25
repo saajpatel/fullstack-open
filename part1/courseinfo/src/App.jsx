@@ -48,7 +48,10 @@ const App = () => {
 
   return (
     
-    <Course key={courses[0].id} course = {courses[0]}/> 
+    <>
+      <h1>Web development curriculum</h1>
+      <Course course = {courses}/> 
+    </>
 
   )
 }

@@ -2,7 +2,7 @@ const Header = ({name}) => {
 
     return (
   
-      <h1>{name}</h1>
+      <h2>{name}</h2>
   
     )
   
@@ -40,7 +40,7 @@ const Header = ({name}) => {
     return (
   
       <div>
-        <p>total of {parts.reduce((sum, part) => sum + part.exercises, 0)} exercises</p>
+        <p> <b>total of {parts.reduce((sum, part) => sum + part.exercises, 0)} exercises</b> </p>
       </div>
   
     )
@@ -51,11 +51,20 @@ const Header = ({name}) => {
 
     return (
 
-    <div>
-      <Header name = {course.name}/>
-      <Content course = {course}/> 
-      <Total parts = {course.parts}/>
-    </div>
+      <div>
+
+        {course.map(course =>
+
+        <div key={course.id}>
+          <Header name = {course.name}/>
+          <Content course = {course}/> 
+          <Total parts = {course.parts}/>
+        </div>
+  
+        )}
+      </div>
+        
+      
     )
 
   }
