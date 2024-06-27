@@ -11,6 +11,17 @@ const App = () => {
     const nameObject = {
       name: newName,
     }
+
+    for (const person of persons) {
+
+      if (person.name === nameObject.name) {
+  
+        alert('you are going to DIE!')
+        return
+        
+      }
+
+    }
     
     setPersons(persons.concat(nameObject))
     setNewName('')
