@@ -16,7 +16,7 @@ const App = () => {
 
       if (person.name === nameObject.name) {
   
-        alert('you are going to DIE!')
+        alert(`${nameObject.name} is already added to phonebook`)
         return
         
       }
