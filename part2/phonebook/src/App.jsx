@@ -44,7 +44,7 @@ const Persons = ({persons, filter}) => {
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas',
-      phone: '040-1234567'
+      phone: '040-12345678'
     }
   ]) 
   const [newName, setNewName] = useState('')
