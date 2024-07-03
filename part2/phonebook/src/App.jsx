@@ -29,14 +29,19 @@ const PersonForm = ({addName, newName, handleNameChange, newPhone, handlePhoneCh
     </div>
   </form>
 )
-const Persons = ({persons, filter}) => {
+const Persons = ({persons, filter, deletePerson}) => {
 
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
     <>
       {personsToShow.map(person =>
-        <div key={person.name}> {person.name} {person.number} </div>
+        <div key={person.name}> 
+          {person.name} {person.number} 
+          <button onClick={() => deletePerson(person)}>
+            delete
+          </button>
+        </div>
       )}
     </>
   )
@@ -62,7 +67,7 @@ const App = () => {
     event.preventDefault()
     const nameObject = {
       name: newName,
-      phone: newPhone
+      number: newPhone
     }
 
     for (const person of persons) {
@@ -79,10 +84,11 @@ const App = () => {
     phonebookService
       .create(nameObject)
       .then(returnedPerson => {
-        setPersons(persons.concat(nameObject))
+        setPersons(persons.concat(returnedPerson))
         setNewName('')
         setnewPhone('')
       })
+
   }
 
   const handleNameChange = (event) => {
@@ -95,6 +101,19 @@ const App = () => {
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value)
+  }
+
+  const deletePerson = (person) => {
+
+    if(window.confirm(`Delete ${person.name}?`)) {
+
+      phonebookService
+      .deletePerson(person)
+      .then (() => {
+        setPersons(persons.filter(onePerson => onePerson.id !== person.id))
+      })
+        
+    }
   }
 
   return (
@@ -110,7 +129,7 @@ const App = () => {
         handlePhoneChange={handlePhoneChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter}/>
+      <Persons persons={persons} filter={filter} deletePerson={deletePerson}/>
     </div>
   )
 }
