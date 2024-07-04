@@ -59,7 +59,6 @@ const App = () => {
       .getAll()
       .then(initialPersons => {
         setPersons(initialPersons)
-        console.log(initialPersons)
       })
   }, [])
 
