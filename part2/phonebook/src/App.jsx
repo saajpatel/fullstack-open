@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import phonebookService from './services/phonebook'
 import Notification from './components/Notification'
+import ErrorNotification from './components/ErrorNotification'
 
 const Filter = ({filter, handleFilterChange}) => (
     <div>
@@ -55,6 +56,7 @@ const App = () => {
   const [newPhone, setnewPhone] = useState('')
   const [filter, setFilter] = useState('')
   const [message, setMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     phonebookService
@@ -92,6 +94,14 @@ const App = () => {
                 setMessage(null)
               }, 5000)
             })
+            .catch(error => {
+              setErrorMessage(`Information of ${changedPerson.name} has already been removed from the server`)
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
+              setPersons(persons.filter(n => n.id !== changedPerson.id))
+            })
+            
 
         }
 
@@ -138,6 +148,9 @@ const App = () => {
       .then (() => {
         setPersons(persons.filter(onePerson => onePerson.id !== person.id))
       })
+      .catch(error => {
+
+      })
         
     }
   }
@@ -146,6 +159,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={message}/>
+      <ErrorNotification message={errorMessage}/>
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       <h2>add a new</h2>
       <PersonForm 
