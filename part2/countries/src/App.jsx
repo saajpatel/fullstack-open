@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import countriesService from './services/countries'
 
-const Display = ({data}) => {
+const Display = ({data, showOneCountry}) => {
 
   console.log(data)
   if (data === null) {
@@ -17,46 +17,59 @@ const Display = ({data}) => {
     const country = data[0]
     console.log(Object.values(country.languages))
     return (
-      <div>
-        <h1>{country.name.common}</h1>
-        <p>
-          capital {country.capital}
-        </p>
-        <p>
-          area {country.area}
-        </p>
-        <h3>languages:</h3>
-        <ul>
-          {Object.values(country.languages).map(language =>
-            <li key={language}>
-              {language}
-            </li>
-          )}
-        </ul>
-        <img src={country.flags.png}/>
-      </div>
+      <CountryData country={data[0]}/>
     )
 
   }
 
   return (
     <div>
-      <ul>
       {data.map(country =>
-        <li key={country.name.common}>
+        <div key={country.name.common}>
           {country.name.common}
-        </li>
+          <button onClick={() => showOneCountry(country.name.common)}>
+          show
+          </button>
+        </div>
       )}
-      </ul>
     </div>
   )
 
+}
+
+const CountryData = ({country}) => {
+  
+if (country === '') {
+  return null
+}
+
+  return (
+    <div>
+      <h1>{country.name.common}</h1>
+      <p>
+        capital {country.capital}
+      </p>
+      <p>
+        area {country.area}
+      </p>
+      <h3>languages:</h3>
+      <ul>
+        {Object.values(country.languages).map(language =>
+          <li key={language}>
+            {language}
+          </li>
+        )}
+      </ul>
+      <img src={country.flags.png}/>
+    </div>
+  )
 }
 
 const App = () => {
 
   const [query, setQuery] = useState('')
   const [data, setData] = useState([])
+  const [oneCountry, setOneCountry] = useState('')
 
   useEffect(() => {
     countriesService
@@ -69,6 +82,17 @@ const App = () => {
 
   const handleQueryChange = event => {
     setQuery(event.target.value)
+    setOneCountry('')
+  }
+
+  const showOneCountry = (country) => {
+
+    countriesService
+    .getOne(country)
+    .then(oneCountry => {
+      setOneCountry(oneCountry)
+    })
+
   }
 
   return (
@@ -80,7 +104,8 @@ const App = () => {
         onChange={handleQueryChange}
         />
       </p>
-      <Display data={data}/>
+      <Display data={data} showOneCountry={showOneCountry}/>
+      <CountryData country={oneCountry}/>
     </div>
   )
 }
