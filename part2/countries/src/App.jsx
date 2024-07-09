@@ -4,7 +4,7 @@ import countriesService from './services/countries'
 
 const Display = ({data, showOneCountry}) => {
 
-  console.log(data)
+
   if (data === null) {
     return null
   }
@@ -15,9 +15,9 @@ const Display = ({data, showOneCountry}) => {
 
   if (data.length === 1) {
     const country = data[0]
-    console.log(Object.values(country.languages))
+
     return (
-      <CountryData country={data[0]}/>
+      <CountryData country={country}/>
     )
 
   }
@@ -37,7 +37,7 @@ const Display = ({data, showOneCountry}) => {
 
 }
 
-const CountryData = ({country}) => {
+const CountryData = ({country, weather}) => {
   
 if (country === '') {
   return null
@@ -61,6 +61,10 @@ if (country === '') {
         )}
       </ul>
       <img src={country.flags.png}/>
+      <h2>{`Weather in ${country.name.common}`}</h2>
+      <p>
+        temperature
+      </p>
     </div>
   )
 }
@@ -70,6 +74,7 @@ const App = () => {
   const [query, setQuery] = useState('')
   const [data, setData] = useState([])
   const [oneCountry, setOneCountry] = useState('')
+  const [oneWeather, setOneWeather] = useState('')
 
   useEffect(() => {
     countriesService
@@ -93,7 +98,15 @@ const App = () => {
       setOneCountry(oneCountry)
     })
 
+    countriesService
+    .getGeo(country)
+    .then(oneWeather => {
+      setOneWeather(oneWeather)
+    })
+
   }
+
+  console.log(oneWeather)
 
   return (
     <div>
@@ -105,7 +118,7 @@ const App = () => {
         />
       </p>
       <Display data={data} showOneCountry={showOneCountry}/>
-      <CountryData country={oneCountry}/>
+      <CountryData country={oneCountry} weather={oneWeather}/>
     </div>
   )
 }
