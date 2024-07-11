@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseUrl = 'https://studies.cs.helsinki.fi/restcountries/api'
 const geoUrl = 'http://api.openweathermap.org/geo/1.0/direct'
-const weatherUrl = 'https://api.openweathermap.org/data/3.0/onecall'
+const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather'
 const api_key = import.meta.env.VITE_SOME_KEY
 
 const getAll = () => {
@@ -22,11 +22,13 @@ const getGeo = (country) => {
 
 }
 
-const getWeather = ({country, geoData}) => {
+const getWeather = (data) => {
 
-    const weatherRequest = axios.get(`${weatherUrl}?lat=`)
-
+    const geoData = data[0]
+    const weatherRequest = axios.get(`${weatherUrl}?lat=${geoData.lat.toFixed(2)}&lon=${geoData.lon.toFixed(2)}&appid=${api_key}&units=metric`)
+    console.log(`${weatherUrl}?lat=${geoData.lat.toFixed(2)}&lon=${geoData.lon.toFixed(2)}&appid=${api_key}&units=metric`)
+    return weatherRequest.then(response => response.data)
 
 }
 
-export default { getAll, getOne, getGeo }
+export default { getAll, getOne, getGeo, getWeather }
