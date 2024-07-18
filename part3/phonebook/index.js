@@ -20,6 +20,7 @@ app.use(morgan(function (tokens, req, res) {
       tokens.person(req, res)
     ].join(' ')
   }))
+app.use(express.static('dist'))
 
 let persons = [
     { 
