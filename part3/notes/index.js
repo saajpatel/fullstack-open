@@ -1,22 +1,8 @@
+require('dotenv').config()
 const express = require('express')
-const cors = require('cors')
 const app = express()
-
-const mongoose = require('mongoose')
-
-const password = process.argv[2]
-
-const url = process.env.MONGODB_URI;
-
-mongoose.set('strictQuery',false)
-mongoose.connect(url)
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
-})
-
-const Note = mongoose.model('Note', noteSchema)
+const Note = require('./models/note')
+const cors = require('cors')
 
 app.use(cors())
 
@@ -65,14 +51,9 @@ app.get('/api/notes', (request, response) => {
 })
 
 app.get('/api/notes/:id', (request, response) => {
-  const id = request.params.id
-  const note = notes.find(note => note.id === id)
-
-  if (note) {
+  Note.findById(request.param.id).then(note => {
     response.json(note)
-  } else {
-    response.status(404).end()
-  }
+  })
 })
 
 app.delete('/api/notes/:id', (request, response) => {
@@ -89,24 +70,30 @@ const generateId = () => {
   return String(maxId + 1)
 }
 
+
 app.post('/api/notes', (request, response) => {
   const body = request.body
 
+  /*
   if (!body.content) {
     return response.status(400).json({ 
       error: 'content missing' 
     })
   }
+  */
 
-  const note = {
-    content: body.content,
-    important: Boolean(body.important) || false,
-    id: generateId(),
+  if (body.content === undefined) {
+    return response.status(400).json({ error: 'content missing' })
   }
 
-  notes = notes.concat(note)
+  const note = new Note({
+    content: body.content,
+    important: body.important || false,
+  })
 
-  response.json(note)
+  note.save().then(savedNote => {
+    response.json(savedNote)
+  })
 })
 
 app.use(unknownEndpoint)
