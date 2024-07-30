@@ -88,7 +88,6 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id
 
     Entry.findByIdAndDelete(request.params.id)
         .then(result => {
@@ -114,6 +113,22 @@ app.post('/api/persons', (request, response) => {
     person.save().then(savedPerson => {
         response.json(savedPerson)
     })
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+
+    const body = request.body
+    
+    const note = {
+        name: body.name,
+        number: body.number,
+    }
+
+    Entry.findByIdAndUpdate(request.params.id, note, { new: true })
+        .then(updatedEntry => {
+            response.json(updatedEntry)
+        })
+        .catch(error => next(error))
 })
 
 app.use(errorHandler)
