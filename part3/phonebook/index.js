@@ -7,7 +7,6 @@ const cors = require('cors')
 
 app.use(cors())
 
-
 let persons = [
     { 
         "id": "1",
@@ -66,25 +65,34 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/info', (request, response) => {
 
-    const amount = persons.length
     const date = new Date().toString()
 
-    response.send(`
-        <p> Phonebook has info for ${amount} people </p>
-        <p> ${date} </p>
-        `)
+    Entry.countDocuments()
+      .then(num => {
+        response.send(`
+          <p> Phonebook has info for ${num} people </p>
+          <p> ${date} </p>
+          `)
+      })
+      .catch(error => {
+        response.send(`
+          <p> Phonebook has info for ${null} people </p>
+          <p> ${date} </p>
+          `)
+      })
 })
 
 app.get('/api/persons/:id', (request, response) => {
 
-    const id = request.params.id
-    const person = persons.find(person => person.id === id)
-
-    if (person) {
-        response.json(person)
-    } else {
+  Entry.findById(request.params.id)
+    .then(entry => {
+      if (entry) {
+        response.json(entry)
+      } else {
         response.status(404).end()
-    }
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response) => {
