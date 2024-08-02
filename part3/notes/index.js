@@ -5,25 +5,6 @@ require('dotenv').config()
 const Note = require('./models/note')
 app.use(express.static('dist'))
 
-
-let notes = [
-  {
-    id: "1",
-    content: "HTML is easy",
-    important: true
-  },
-  {
-    id: "2",
-    content: "Browser can execute only JavaScript",
-    important: false
-  },
-  {
-    id: "3",
-    content: "GET and POST are the most important methods of HTTP protocol",
-    important: true
-  }
-]
-
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
@@ -84,7 +65,6 @@ app.post('/api/notes', (request, response, next) => {
 })
 
 app.get('/api/notes/:id', (request, response, next) => {
-  console.log(request.param.id)
   Note.findById(request.param.id)
     .then(note => {
       if(note) {
@@ -110,7 +90,7 @@ app.put('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndUpdate(
     request.params.id, 
     { content, important },
-     { new: true, runValidators: true, content: 'query' })
+    { new: true, runValidators: true, content: 'query' })
       .then(updatedNote => {
         response.json(updatedNote)
       })
