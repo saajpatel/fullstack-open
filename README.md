@@ -1,5 +1,5 @@
 # fullstack-open
-Hu
+This was a course I took online about fullstack web development called FullStackOpen. I learned about React, NodeJS, Express, Axios, and more, to create simple web applications. 
 
 ```mermaid
     flowchart TB
